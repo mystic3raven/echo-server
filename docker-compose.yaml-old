@@ -7,8 +7,8 @@ services:
       dockerfile: Dockerfile.echo
     ports:
       - "5001:5001"
-    volumes:
-      - ./data:/data  # Ensure the database is accessible
+    depends_on:
+      - db
 
   storage-server:
     build:
@@ -16,6 +16,13 @@ services:
       dockerfile: Dockerfile.storage
     ports:
       - "5002:5002"
-    volumes:
-      - ./data:/data  # Ensure the database is accessible
+    depends_on:
+      - db
 
+  db:
+    image: keinos/sqlite3:latest
+    volumes:
+      - messages_data:/data
+
+volumes:
+  messages_data:
