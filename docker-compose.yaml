@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  echo-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.echo
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+
+  storage-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.storage
+    ports:
+      - "5001:5001"
+    depends_on:
+      - db
+
+  db:
+    image: sqlite3
+    volumes:
+      - messages_data:/data
+
+volumes:
+  messages_data:
