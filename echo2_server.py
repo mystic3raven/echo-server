@@ -5,7 +5,7 @@ import requests
 app = Flask(__name__)
 
 # Configuration for storage server
-STORAGE_SERVER_URL = "http://localhost:9090"
+STORAGE_SERVER_URL = "http://localhost:5002"
 
 @app.route('/echo', methods=['POST'])
 def echo():
@@ -36,4 +36,4 @@ def get_messages():
         return {"error": "Failed to connect to storage server", "details": str(e)}, 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
+    app.run(host='0.0.0.0', port=5001)
