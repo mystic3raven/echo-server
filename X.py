@@ -12,7 +12,6 @@ with sqlite3.connect(DB_PATH) as conn:
     conn.commit()
 
 @app.route('/store', methods=['POST'])  # Changed from PUT to POST
-@app.route('/echo', methods=['POST'])  # Changed from PUT to POST
 def store():
     data = request.json
     if not data or 'message' not in data:

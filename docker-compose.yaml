@@ -4,20 +4,33 @@ services:
   echo2_server:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.echo2
     ports:
-      - "8080:8080"
+      - "5001:5001"
     environment:
       - APP_ENV=production
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     container_name: echo2_server
 
   storage2_server:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.storage2
     ports:
-      - "9090:9090"
+      - "5002:5002"
     environment:
       - APP_ENV=production
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     container_name: storage2_server
+
+networks:
+  default:
+    name: echo-network
+    driver: bridge
 

@@ -1,3 +1,4 @@
+# storage_server.py
 import sqlite3
 from flask import Flask, request, jsonify
 
@@ -11,8 +12,7 @@ with sqlite3.connect(DB_PATH) as conn:
     conn.execute("CREATE TABLE IF NOT EXISTS messages (id INTEGER PRIMARY KEY, message TEXT)")
     conn.commit()
 
-@app.route('/store', methods=['POST'])  # Changed from PUT to POST
-@app.route('/echo', methods=['POST'])  # Changed from PUT to POST
+@app.route('/store', methods=['PUT'])
 def store():
     data = request.json
     if not data or 'message' not in data:
@@ -40,4 +40,3 @@ def get_messages():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5002)
-

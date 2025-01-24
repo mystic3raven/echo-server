@@ -5,7 +5,10 @@ import requests
 app = Flask(__name__)
 
 # Configuration for storage server
-STORAGE_SERVER_URL = "http://localhost:5002"
+#STORAGE_SERVER_URL = "http://localhost:5002"
+#STORAGE_SERVER_URL = "http://storage2_server:5002"
+STORAGE_SERVER_URL = "http://storage2_server:5002"
+
 
 @app.route('/echo', methods=['POST'])
 def echo():

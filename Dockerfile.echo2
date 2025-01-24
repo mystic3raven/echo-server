@@ -10,11 +10,16 @@ WORKDIR /app
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Add this line to install curl
+RUN apt update && apt install -y curl
+RUN apt update && apt install -y dnsutils
+
+
 # Copy the application code
 COPY echo2_server.py ./
 
 # Expose the port the application runs on
-EXPOSE 8080
+EXPOSE 5001
 
 # Command to run the application
 CMD ["python", "echo2_server.py"]
