@@ -1,0 +1,24 @@
+# Dockerfile for storage2_server
+
+# Base image
+FROM python:3.9-slim
+
+# Set the working directory
+WORKDIR /app
+
+# Copy requirements file and install dependencies
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Add this line to install curl
+RUN apt update && apt install -y curl
+RUN apt update && apt install -y dnsutils
+
+# Copy the application code
+COPY storage2_server.py ./
+
+# Expose the port the application runs on
+EXPOSE 5002
+
+# Command to run the application
+CMD ["python", "storage2_server.py"]

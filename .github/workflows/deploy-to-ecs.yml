@@ -1,0 +1,62 @@
+name: Deploy to ECS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Build, Push, and Deploy to ECS
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout the code
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    # Step 2: Configure AWS Credentials
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1  # Change this to your AWS region
+
+    # Step 3: Login to Amazon ECR
+    - name: Log in to Amazon ECR
+      id: ecr-login
+      run: |
+        aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com
+
+    # Step 4: Build and Push Docker Image for echo_server
+    - name: Build and Push echo_server
+      run: |
+        IMAGE_URI="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/echo_server:latest"
+        docker build -t echo_server .
+        docker tag echo_server:latest $IMAGE_URI
+        docker push $IMAGE_URI
+
+    # Step 5: Build and Push Docker Image for storage_server
+    - name: Build and Push storage_server
+      run: |
+        IMAGE_URI="${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.us-east-1.amazonaws.com/storage_server:latest"
+        docker build -t storage_server .
+        docker tag storage_server:latest $IMAGE_URI
+        docker push $IMAGE_URI
+
+    # Step 6: Deploy echo_server to ECS
+    - name: Deploy echo_server to ECS
+      run: |
+        aws ecs update-service \
+          --cluster my-app-cluster \
+          --service echo-server-service \
+          --force-new-deployment
+
+    # Step 7: Deploy storage_server to ECS
+    - name: Deploy storage_server to ECS
+      run: |
+        aws ecs update-service \
+          --cluster my-app-cluster \
+          --service storage-server-service \
+          --force-new-deployment

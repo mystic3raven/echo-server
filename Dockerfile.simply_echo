@@ -1,0 +1,16 @@
+# Dockerfile
+# Use the official Python image from DockerHub
+FROM python:3.9-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the current directory contents into the container
+COPY . /app
+
+# Expose the port the server runs on
+EXPOSE 65432
+
+# Run the echo server
+CMD ["python", "echo_server.py"]
+
