@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 import sqlite3
 
 # Path to the SQLite database
-DB_PATH = '/data/messages.db'
+DB_PATH = './data/messages.db'
 
 # Initialize Flask application
 echo_app = Flask(__name__)
@@ -43,5 +43,5 @@ def get_messages():
     return jsonify(messages)
 
 if __name__ == '__main__':
-    echo_app.run(host='0.0.0.0', port=5000)
+    echo_app.run(host='0.0.0.0', port=5001)
 
